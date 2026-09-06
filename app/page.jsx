@@ -5412,6 +5412,8 @@ function buildAdvisorSystem(profile,reportData,isPremium,memCtx){
   const timeStr = nowDt.toLocaleTimeString("en-GB",{hour:"numeric",minute:"2-digit",hour12:true});
   const tz      = (()=>{try{return Intl.DateTimeFormat().resolvedOptions().timeZone||"";}catch{return "";}})();
   const tzStr   = tz ? `, ${tz}` : "";
+  const goalLine = (profile?.goals||profile?.bigGoal||"").trim();
+  const wantLine = (profile?.wantFrom||"").trim();
   return `You are ${name}'s personal AI companion at DestinIQ — part close friend, part life coach. You know their full story from their profile.
 
 CURRENT DATE & TIME (${name}'s local time${tzStr}): ${dateStr}, ${timeStr}. Use this whenever timing matters — reference today, the day of the week, the time of day, or how long until a date naturally. Never guess or invent a different date.
@@ -5422,7 +5424,11 @@ ${buildProfileContext(profile)}
 THEIR SCORES: ${scoreStr}
 ${memCtx?`\nEARLIER IN THIS CONVERSATION:\n${memCtx}`:""}
 
-CURRENCY: Local costs = ${currSym} (${currCode}). International income = USD + ${currSym} equivalent.
+CURRENCY (only when money genuinely comes up): Local costs = ${currSym} (${currCode}). International income = USD + ${currSym} equivalent. Do NOT bring up money, income, business, or earning unless ${name} raises it or their actual goal is about money.
+
+★ FOLLOW THEIR GOAL, NOT MONEY ★
+${goalLine ? `${name}'s actual goal is: "${goalLine}".` : `${name} has not framed their goal around money.`}${wantLine?` What they want from you: "${wantLine}".`:""}
+This is the single most important rule: talk about what THEY care about. If their goal is discipline, focus, relationships, faith, health, confidence, purpose, or peace of mind — stay there. Do not steer the conversation toward money, business, side hustles, or earning unless money is genuinely their goal or they bring it up themselves. Many people come here for discipline, healing, or direction — not cash. Meet them where they actually are. A person working on their marriage does not want a business idea. A person building a morning routine does not need an income strategy.
 
 HOW TO SHOW UP IN THIS CONVERSATION:
 - Be warm and genuinely glad they showed up. NEVER reply with a bare one-word or dismissive line like "Yeah?", "Ok", or "Sure" — even a tiny, vague, or one-word message from them deserves a warm, engaged reply that shows you care and invites them to say more. If you're not sure what they mean, ask kindly rather than brushing them off.
@@ -22785,7 +22791,7 @@ function buildProfileContext(p){
   if(p.challenge)    parts.push(`Biggest challenge: ${p.challenge}`);
   if(p.goals||p.bigGoal) parts.push(`Main goal: ${p.goals||p.bigGoal}`);
   if(p.wantFrom)     parts.push(`What they want from DestinIQ: ${p.wantFrom}`);
-  if(p.country)      parts.push(`\n⚑ COUNTRY-SPECIFIC RULE (critical): This person lives in ${p.country}. Tailor EVERY suggestion to what is realistic, legal and actually available in ${p.country} — its local economy, job market, business ideas that sell there, and ways to earn (online and offline) that people in ${p.country} can genuinely access. What works in one country often does NOT work in another: a hustle common in one place may be irrelevant or unavailable elsewhere, and richer markets have earning options that poorer ones don't, and vice versa. Never default to US/Western advice unless they live there. When you name apps, platforms, marketplaces, payment methods, banks or services, choose ones that operate in ${p.country}.`);
+  if(p.country)      parts.push(`\n⚑ COUNTRY-SPECIFIC RULE (critical): This person lives in ${p.country}. Tailor EVERY suggestion to what is realistic, legal and actually available in ${p.country} — its culture, daily life, resources, and what people there can genuinely access. Never default to US/Western advice unless they live there. When you name apps, platforms, services, foods, places, or ways of doing things, choose ones that fit ${p.country}. ONLY when the conversation is genuinely about money, work, or business: also account for the local economy, job market, and realistic ways to earn there — but never force money into a conversation that isn't about it.`);
   return parts.join("\n");
 }
 
@@ -23120,7 +23126,7 @@ function ProfilePage({user,formData,isPaid,isPremium,isProMax,streak,onBack,onSi
 // ═══════════════════════════════════════════════════════════════════════════════
 const ADMIN_EMAILS=["destiniq21@gmail.com","support@destiniq.app"]; // founder logins with admin access
 let IS_ADMIN=false; // set at login from the real auth email; readable by any component
-const DIQ_BUILD="v51-affiliates"; // visible build tag — bump when deploying to verify what is live
+const DIQ_BUILD="v52-coach-goal-aware"; // visible build tag — bump when deploying to verify what is live
 
 function AdminDashboard({user,onBack}){
   const [stats,setStats]=useState(null);
