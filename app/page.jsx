@@ -17757,12 +17757,9 @@ function CategoryPage({catId,setNav,goBack,userId}){
       fontFamily:"-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"}}>
 
       {/* ── TOP BAR ── */}
+      {/* The mobile top bar already shows a back arrow, so an in-page "← Back"
+          here gave users TWO back buttons on a module. Removed the duplicate. */}
       <div style={{padding:"16px 20px 0",maxWidth:860,margin:"0 auto"}}>
-        <button onClick={()=>goBack?goBack():setNav("explore")}
-          style={{background:"none",border:"none",color:G.dim,cursor:"pointer",
-            fontSize:13,display:"flex",alignItems:"center",gap:6,padding:"4px 0",marginBottom:16}}>
-          ← Back
-        </button>
 
         {/* Hero */}
         <div style={{background:`linear-gradient(135deg,${cat.color}12,${cat.color}04)`,
@@ -23126,7 +23123,7 @@ function ProfilePage({user,formData,isPaid,isPremium,isProMax,streak,onBack,onSi
 // ═══════════════════════════════════════════════════════════════════════════════
 const ADMIN_EMAILS=["destiniq21@gmail.com","support@destiniq.app"]; // founder logins with admin access
 let IS_ADMIN=false; // set at login from the real auth email; readable by any component
-const DIQ_BUILD="v52-coach-goal-aware"; // visible build tag — bump when deploying to verify what is live
+const DIQ_BUILD="v53-back-fix"; // visible build tag — bump when deploying to verify what is live
 
 function AdminDashboard({user,onBack}){
   const [stats,setStats]=useState(null);
